@@ -1,36 +1,36 @@
 <template>
   <form id="form" class="p-input-filled" action="">
     <!--TODO: Title -->
-    <div>
+    <div class="one">
       <h1>Sign Up</h1>
     </div>
     <!--TODO: First Name -->
-    <div class="p-float-label">
+    <div class="two p-float-label">
       <InputText id="firstName" type="text" v-model="firstName" />
       <label for="firstName">First name</label>
     </div>
     <!--TODO: Last Name -->
-    <div class="p-float-label">
+    <div class="three p-float-label">
       <InputText id="lastName" type="text" v-model="lastName" />
       <label for="lastName">Last name</label>
     </div>
     <!--TODO: Email -->
-    <div class="p-float-label">
+    <div class="four p-float-label">
       <InputText id="email" type="email" v-model="email" />
       <label for="email">Email</label>
     </div>
     <!--TODO: Age -->
-    <div class="p-field p-md-4">
+    <div class="five p-field p-md-4">
       <h4 :style="{ visibility: age >= 5 ? 'visible' : 'hidden' }">Age</h4>
       <Knob v-model="age" :size="150" :min="5" :max="150" />
     </div>
     <!--TODO: PassWord 1 -->
-    <div class="p-float-label">
+    <div class="six p-float-label">
       <Password id="password" v-model="password" toggleMask></Password>
       <label for="password">Password</label>
     </div>
     <!--TODO: PassWord 2 -->
-    <div class="p-float-label">
+    <div class="seven p-float-label">
       <Password
         id="password2"
         v-model="password2"
@@ -40,7 +40,7 @@
       <label for="password2">Confirm Password</label>
     </div>
     <!--TODO: Degree Large screen -->
-    <div>
+    <div class="nine" v-if="true">
       <h4>Your education</h4>
       <SelectButton
         v-model="degree"
@@ -49,7 +49,7 @@
       />
     </div>
     <!--TODO: Degree Small screen -->
-    <div id="radio">
+    <div class="nine" id="radio" v-if="false">
       <div class="p-field-radiobutton">
         <RadioButton
           id="Student"
@@ -79,7 +79,7 @@
       </div>
     </div>
     <!--TODO: Confirm Terms -->
-    <div>
+    <div class="eight">
       <h4>Confirm Terms</h4>
       <ToggleButton
         id="confirm"
@@ -92,16 +92,16 @@
       />
     </div>
     <!--TODO: Rating -->
-    <div>
+    <div class="ten">
       <h4>Your rating to this registration form</h4>
       <Rating id="rating" v-model="rating" :cancel="false" />
     </div>
     <!--TODO: submit button -->
-    <div>
+    <div class="eleven">
       <Button icon="pi pi-check" label="Submit" class="p-button-raised" />
     </div>
     <!--TODO: reset button -->
-    <div>
+    <div class="twelve">
       <Button
         icon="pi pi-times"
         label="Reset"
@@ -157,10 +157,78 @@ export default {
 #form {
   display: grid;
   gap: 2rem;
+  grid-auto-columns: 1fr;
+  align-items: center;
+  justify-items: center;
+  grid-template-areas:
+    "one"
+    "two"
+    "three"
+    "four"
+    "five"
+    "six"
+    "seven"
+    "eight"
+    "nine"
+    "ten"
+    "eleven"
+    "twelve";
 }
 
 #radio {
   display: grid;
   gap: 1rem;
+}
+
+.one {
+  grid-area: one;
+  justify-self: start;
+}
+.two {
+  grid-area: two;
+}
+.three {
+  grid-area: three;
+}
+.four {
+  grid-area: four;
+}
+.five {
+  grid-area: five;
+}
+.six {
+  grid-area: six;
+}
+.seven {
+  grid-area: seven;
+}
+.eight {
+  grid-area: eight;
+}
+.nine {
+  grid-area: nine;
+}
+.ten {
+  grid-area: ten;
+}
+.eleven {
+  grid-area: eleven;
+}
+.twelve {
+  grid-area: twelve;
+}
+
+@media (min-width: 42em) {
+  #form {
+    grid-template-areas:
+      "one one"
+      "two three"
+      "four five"
+      "six five"
+      "seven five"
+      "eight nine"
+      "ten ten"
+      "eleven twelve";
+  }
 }
 </style>

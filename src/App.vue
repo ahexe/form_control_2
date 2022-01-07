@@ -57,7 +57,7 @@ body {
 
 #app {
   padding-block: 2rem;
-  width: min(95%, 40rem);
+  width: min(95%, 42rem);
   margin-inline: auto;
 }
 </style>
