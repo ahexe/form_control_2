@@ -40,12 +40,17 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: "Ubuntu";
+  src: local("Ubuntu"), url(./fonts/Ubuntu-Light.ttf) format("truetype");
+}
+
 * {
   box-sizing: border-box;
+  font-family: "Ubuntu", sans-serif;
 }
 
 html {
-  font-family: sans-serif;
 }
 
 body {
