@@ -21,12 +21,17 @@
     </div>
     <!--TODO: Age -->
     <div class="five p-field p-md-4">
-      <h4 :style="{ visibility: age >= 5 ? 'visible' : 'hidden' }">Age</h4>
+      <h5 :style="{ visibility: age >= 5 ? 'visible' : 'hidden' }">Age</h5>
       <Knob v-model="age" :size="150" :min="5" :max="150" />
     </div>
     <!--TODO: PassWord 1 -->
     <div class="six p-float-label">
-      <Password id="password" v-model="password" toggleMask></Password>
+      <Password
+        id="password"
+        v-model="password"
+        toggleMask
+        size="17"
+      ></Password>
       <label for="password">Password</label>
     </div>
     <!--TODO: PassWord 2 -->
@@ -36,6 +41,7 @@
         v-model="password2"
         toggleMask
         :feedback="false"
+        size="17"
       ></Password>
       <label for="password2">Confirm Password</label>
     </div>
@@ -50,6 +56,7 @@
     </div>
     <!--TODO: Degree Small screen -->
     <div class="nine" id="radio" v-if="false">
+      <h4>Your education</h4>
       <div class="p-field-radiobutton">
         <RadioButton
           id="Student"
@@ -80,33 +87,28 @@
     </div>
     <!--TODO: Confirm Terms -->
     <div class="eight">
-      <h4>Confirm Terms</h4>
       <ToggleButton
         id="confirm"
         v-model="confirm"
         onLabel="I confirm"
-        offLabel="I reject"
+        offLabel="Confirm"
         onIcon="pi pi-check"
         offIcon="pi pi-times"
-        style="width: 10em"
       />
     </div>
     <!--TODO: Rating -->
     <div class="ten">
       <h4>Your rating to this registration form</h4>
-      <Rating id="rating" v-model="rating" :cancel="false" />
+      <Rating
+        class="text-center"
+        id="rating"
+        v-model="rating"
+        :cancel="false"
+      />
     </div>
     <!--TODO: submit button -->
     <div class="eleven">
       <Button icon="pi pi-check" label="Submit" class="p-button-raised" />
-    </div>
-    <!--TODO: reset button -->
-    <div class="twelve">
-      <Button
-        icon="pi pi-times"
-        label="Reset"
-        class="p-button-raised p-button-secondary"
-      />
     </div>
   </form>
 </template>
@@ -168,16 +170,10 @@ export default {
     "five"
     "six"
     "seven"
-    "eight"
     "nine"
     "ten"
-    "eleven"
-    "twelve";
-}
-
-#radio {
-  display: grid;
-  gap: 1rem;
+    "eight"
+    "eleven";
 }
 
 .one {
@@ -214,9 +210,6 @@ export default {
 .eleven {
   grid-area: eleven;
 }
-.twelve {
-  grid-area: twelve;
-}
 
 @media (min-width: 42em) {
   #form {
@@ -226,9 +219,14 @@ export default {
       "four five"
       "six five"
       "seven five"
-      "eight nine"
+      "nine nine"
       "ten ten"
-      "eleven twelve";
+      "eight eleven";
   }
+}
+
+#radio {
+  display: grid;
+  gap: 1rem;
 }
 </style>
