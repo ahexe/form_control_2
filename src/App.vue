@@ -50,9 +50,6 @@ export default {
   font-family: "Ubuntu", sans-serif;
 }
 
-html {
-}
-
 body {
   margin: 0;
   background-color: #040d19;

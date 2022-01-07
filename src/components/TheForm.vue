@@ -1,11 +1,11 @@
 <template>
-  <form class="p-input-filled mx-2" action="">
-    <h1 class="mb-5">Sign Up</h1>
-    <div class="grid">
+  <form class="p-input-filled" action="">
+    <h1>Sign Up</h1>
+    <div>
       <!--TODO: First Name -->
-      <div class="p-float-label px-0 my-3 md:col-6 col-12">
+      <div class="p-float-label px-0">
         <InputText
-          class="w-10 max-w-max"
+          class="w-10 max-w-screen"
           id="firstName"
           type="text"
           v-model="firstName"
@@ -13,7 +13,7 @@
         <label for="firstName">First name</label>
       </div>
       <!--TODO: Last Name -->
-      <div class="p-float-label px-0 my-3 md:col-6 col-12">
+      <div class="p-float-label px-0">
         <InputText
           class="w-10 max-w-max"
           id="lastName"
@@ -24,8 +24,8 @@
       </div>
     </div>
     <!--TODO: Email -->
-    <div class="grid">
-      <div class="p-float-label px-0 my-3 col-12">
+    <div>
+      <div class="p-float-label px-0">
         <InputText
           class="w-10 max-w-max"
           id="email"
@@ -36,13 +36,13 @@
       </div>
     </div>
     <!--TODO: Age -->
-    <div class="p-field p-col-12 p-md-4">
-      <h5 :style="{ visibility: age >= 5 ? 'visible' : 'hidden' }">Age</h5>
+    <div class="p-field p- p-md-4">
+      <h4 :style="{ visibility: age >= 5 ? 'visible' : 'hidden' }">Age</h4>
       <Knob v-model="age" :size="150" :min="5" :max="150" />
     </div>
     <!--TODO: PassWord -->
-    <div class="grid">
-      <div class="p-float-label px-0 my-3 md:col-6 col-12">
+    <div>
+      <div class="p-float-label px-0">
         <Password
           class="max-w-max"
           id="password"
@@ -52,7 +52,7 @@
         ></Password>
         <label for="password">Password</label>
       </div>
-      <div class="p-float-label px-0 my-3 md:col-6 col-12">
+      <div class="p-float-label px-0">
         <Password
           class="max-w-max"
           id="password2"
@@ -72,7 +72,36 @@
           v-model="degree"
           :options="degreeOptions"
           optionLabel="degreeTitle"
+          class="p-button-sm w-12"
         />
+        <!--TODO: In Small Screen -->
+        <div class="p-field-radiobutton">
+          <RadioButton
+            id="Student"
+            name="Student"
+            :value="degreeOptions[0].value"
+            v-model="degree2"
+          />
+          <label for="Student">Student</label>
+        </div>
+        <div class="p-field-radiobutton">
+          <RadioButton
+            id="Collegian"
+            name="Collegian"
+            :value="degreeOptions[1].value"
+            v-model="degree2"
+          />
+          <label for="Collegian">Collegian</label>
+        </div>
+        <div class="p-field-radiobutton">
+          <RadioButton
+            id="Professor"
+            name="Professor"
+            :value="degreeOptions[2].value"
+            v-model="degree2"
+          />
+          <label for="Professor">Professor</label>
+        </div>
       </div>
     </div>
     <!--TODO: Confirm Terms -->
@@ -92,23 +121,23 @@
       </div>
     </div>
     <!--TODO: Rating -->
-    <div class="grid my-3">
-      <div class="col-12">
+    <div>
+      <div>
         <h4>Your rating to this registration form</h4>
-        <Rating id="rating" v-model="rating" :cancel="false" class="mt-3" />
+        <Rating id="rating" v-model="rating" :cancel="false" />
       </div>
     </div>
     <!--TODO: Buttons -->
-    <div class="grid">
+    <div>
       <Button
         icon="pi pi-check"
         label="Submit"
-        class="p-button-raised p-button-sm mx-2"
+        class="p-button-raised p-button-sm"
       />
       <Button
         icon="pi pi-times"
         label="Reset"
-        class="p-button-raised p-button-secondary p-button-sm mx-2"
+        class="p-button-raised p-button-secondary p-button-sm"
       />
     </div>
   </form>
@@ -121,6 +150,7 @@ import Password from "../../node_modules/primevue/password";
 import Rating from "../../node_modules/primevue/rating";
 import ToggleButton from "../../node_modules/primevue/togglebutton";
 import SelectButton from "../../node_modules/primevue/selectbutton";
+import RadioButton from "../../node_modules/primevue/radiobutton";
 
 export default {
   components: {
@@ -130,6 +160,7 @@ export default {
     Rating,
     ToggleButton,
     SelectButton,
+    RadioButton,
   },
   data() {
     return {
@@ -142,6 +173,7 @@ export default {
       rating: 3,
       confirm: false,
       degree: null,
+      degree2: null,
       degreeOptions: [
         { degreeTitle: "Student", value: "Student" },
         { degreeTitle: "Collegian", value: "Collegian" },
@@ -149,5 +181,8 @@ export default {
       ],
     };
   },
+  methods: {},
 };
 </script>
+
+<style scoped></style>
