@@ -1,143 +1,111 @@
 <template>
-  <form class="p-input-filled" action="">
-    <h1>Sign Up</h1>
+  <form id="form" class="p-input-filled" action="">
+    <!--TODO: Title -->
     <div>
-      <!--TODO: First Name -->
-      <div class="p-float-label px-0">
-        <InputText
-          class="w-10 max-w-screen"
-          id="firstName"
-          type="text"
-          v-model="firstName"
-        />
-        <label for="firstName">First name</label>
-      </div>
-      <!--TODO: Last Name -->
-      <div class="p-float-label px-0">
-        <InputText
-          class="w-10 max-w-max"
-          id="lastName"
-          type="text"
-          v-model="lastName"
-        />
-        <label for="lastName">Last name</label>
-      </div>
+      <h1>Sign Up</h1>
+    </div>
+    <!--TODO: First Name -->
+    <div class="p-float-label">
+      <InputText id="firstName" type="text" v-model="firstName" />
+      <label for="firstName">First name</label>
+    </div>
+    <!--TODO: Last Name -->
+    <div class="p-float-label">
+      <InputText id="lastName" type="text" v-model="lastName" />
+      <label for="lastName">Last name</label>
     </div>
     <!--TODO: Email -->
-    <div>
-      <div class="p-float-label px-0">
-        <InputText
-          class="w-10 max-w-max"
-          id="email"
-          type="email"
-          v-model="email"
-        />
-        <label for="email">Email</label>
-      </div>
+    <div class="p-float-label">
+      <InputText id="email" type="email" v-model="email" />
+      <label for="email">Email</label>
     </div>
     <!--TODO: Age -->
-    <div class="p-field p- p-md-4">
+    <div class="p-field p-md-4">
       <h4 :style="{ visibility: age >= 5 ? 'visible' : 'hidden' }">Age</h4>
       <Knob v-model="age" :size="150" :min="5" :max="150" />
     </div>
-    <!--TODO: PassWord -->
-    <div>
-      <div class="p-float-label px-0">
-        <Password
-          class="max-w-max"
-          id="password"
-          v-model="password"
-          toggleMask
-          :size="18"
-        ></Password>
-        <label for="password">Password</label>
-      </div>
-      <div class="p-float-label px-0">
-        <Password
-          class="max-w-max"
-          id="password2"
-          v-model="password2"
-          toggleMask
-          :feedback="false"
-          :size="18"
-        ></Password>
-        <label for="password2">Confirm Password</label>
-      </div>
+    <!--TODO: PassWord 1 -->
+    <div class="p-float-label">
+      <Password id="password" v-model="password" toggleMask></Password>
+      <label for="password">Password</label>
     </div>
-    <!--TODO: Degree -->
+    <!--TODO: PassWord 2 -->
+    <div class="p-float-label">
+      <Password
+        id="password2"
+        v-model="password2"
+        toggleMask
+        :feedback="false"
+      ></Password>
+      <label for="password2">Confirm Password</label>
+    </div>
+    <!--TODO: Degree Large screen -->
     <div>
-      <div>
-        <h4>Your education</h4>
-        <SelectButton
-          v-model="degree"
-          :options="degreeOptions"
-          optionLabel="degreeTitle"
-          class="p-button-sm w-12"
+      <h4>Your education</h4>
+      <SelectButton
+        v-model="degree"
+        :options="degreeOptions"
+        optionLabel="degreeTitle"
+      />
+    </div>
+    <!--TODO: Degree Small screen -->
+    <div id="radio">
+      <div class="p-field-radiobutton">
+        <RadioButton
+          id="Student"
+          name="Student"
+          :value="degreeOptions[0].value"
+          v-model="degree2"
         />
-        <!--TODO: In Small Screen -->
-        <div class="p-field-radiobutton">
-          <RadioButton
-            id="Student"
-            name="Student"
-            :value="degreeOptions[0].value"
-            v-model="degree2"
-          />
-          <label for="Student">Student</label>
-        </div>
-        <div class="p-field-radiobutton">
-          <RadioButton
-            id="Collegian"
-            name="Collegian"
-            :value="degreeOptions[1].value"
-            v-model="degree2"
-          />
-          <label for="Collegian">Collegian</label>
-        </div>
-        <div class="p-field-radiobutton">
-          <RadioButton
-            id="Professor"
-            name="Professor"
-            :value="degreeOptions[2].value"
-            v-model="degree2"
-          />
-          <label for="Professor">Professor</label>
-        </div>
+        <label for="Student">Student</label>
+      </div>
+      <div class="p-field-radiobutton">
+        <RadioButton
+          id="Collegian"
+          name="Collegian"
+          :value="degreeOptions[1].value"
+          v-model="degree2"
+        />
+        <label for="Collegian">Collegian</label>
+      </div>
+      <div class="p-field-radiobutton">
+        <RadioButton
+          id="Professor"
+          name="Professor"
+          :value="degreeOptions[2].value"
+          v-model="degree2"
+        />
+        <label for="Professor">Professor</label>
       </div>
     </div>
     <!--TODO: Confirm Terms -->
     <div>
-      <div>
-        <h4>Confirm Terms</h4>
-        <ToggleButton
-          id="confirm"
-          v-model="confirm"
-          onLabel="I confirm"
-          offLabel="I reject"
-          onIcon="pi pi-check"
-          offIcon="pi pi-times"
-          style="width: 10em"
-          class="p-button-sm"
-        />
-      </div>
+      <h4>Confirm Terms</h4>
+      <ToggleButton
+        id="confirm"
+        v-model="confirm"
+        onLabel="I confirm"
+        offLabel="I reject"
+        onIcon="pi pi-check"
+        offIcon="pi pi-times"
+        style="width: 10em"
+      />
     </div>
     <!--TODO: Rating -->
     <div>
-      <div>
-        <h4>Your rating to this registration form</h4>
-        <Rating id="rating" v-model="rating" :cancel="false" />
-      </div>
+      <h4>Your rating to this registration form</h4>
+      <Rating id="rating" v-model="rating" :cancel="false" />
     </div>
-    <!--TODO: Buttons -->
+    <!--TODO: submit button -->
     <div>
-      <Button
-        icon="pi pi-check"
-        label="Submit"
-        class="p-button-raised p-button-sm"
-      />
+      <Button icon="pi pi-check" label="Submit" class="p-button-raised" />
+    </div>
+    <!--TODO: reset button -->
+    <div>
       <Button
         icon="pi pi-times"
         label="Reset"
-        class="p-button-raised p-button-secondary p-button-sm"
+        class="p-button-raised p-button-secondary"
       />
     </div>
   </form>
@@ -185,4 +153,14 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+#form {
+  display: grid;
+  gap: 2rem;
+}
+
+#radio {
+  display: grid;
+  gap: 1rem;
+}
+</style>

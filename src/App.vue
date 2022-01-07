@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div>
     <TabView class="card">
       <TabPanel>
         <template #header>
@@ -56,7 +56,8 @@ body {
 }
 
 #app {
-  margin: 2rem auto;
-  max-width: 36rem;
+  padding-block: 2rem;
+  width: min(95%, 40rem);
+  margin-inline: auto;
 }
 </style>
