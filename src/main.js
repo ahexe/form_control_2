@@ -3,7 +3,7 @@ import App from './App.vue';
 import PrimeVue from 'primevue/config';
 import Button from 'primevue/button';
 import ToastService from 'primevue/toastservice';
-
+import Toast from "primevue/toast";
 
 import 'primevue/resources/themes/lara-dark-teal/theme.css'       //theme
 import 'primevue/resources/primevue.min.css'                 //core css
@@ -23,5 +23,6 @@ app.use(PrimeVue, { ripple: true }, { inputStyle: 'filled' }, {
 app.use(ToastService);
 
 app.component('Button', Button)
+app.component('Toast', Toast)
 
 app.mount('#app')

@@ -63,19 +63,19 @@
       <label for="confirmPassword">Confirm Password</label>
     </div>
     <!--TODO: Degree Large screen -->
-    <div class="nine" v-if="true">
+    <div class="nine hidden-in-small-screen">
       <h4>Your education</h4>
       <SelectButton v-model="degree" :options="degreeOptions" />
     </div>
     <!--TODO: Degree Small screen -->
-    <div class="nine" id="radio" v-if="false">
+    <div class="nine hidden-in-large-screen" id="radio">
       <h4>Your education</h4>
       <div class="p-field-radiobutton">
         <RadioButton
           id="Student"
           name="Student"
           :value="degreeOptions[0]"
-          v-model="degree"
+          v-model="degree2"
         />
         <label for="Student">Student</label>
       </div>
@@ -84,7 +84,7 @@
           id="Collegian"
           name="Collegian"
           :value="degreeOptions[1]"
-          v-model="degree"
+          v-model="degree2"
         />
         <label for="Collegian">Collegian</label>
       </div>
@@ -93,22 +93,10 @@
           id="Professor"
           name="Professor"
           :value="degreeOptions[2]"
-          v-model="degree"
+          v-model="degree2"
         />
         <label for="Professor">Professor</label>
       </div>
-    </div>
-    <!--TODO: Confirm Terms -->
-    <div class="eight">
-      <ToggleButton
-        id="confirm"
-        v-model="v$.confirm.$model"
-        onLabel="I confirm"
-        offLabel="Confirm"
-        onIcon="pi pi-check"
-        offIcon="pi pi-times"
-        :style="v$.confirm.$invalid && submitted ? 'border-color: #fca5a5' : ''"
-      />
     </div>
     <!--TODO: Rating -->
     <div class="ten">
@@ -120,16 +108,30 @@
         :cancel="false"
       />
     </div>
+    <!--TODO: Confirm Terms -->
+    <div class="eight">
+      <ToggleButton
+        id="confirm"
+        onLabel="I confirm"
+        offLabel="Confirm"
+        onIcon="pi pi-check"
+        offIcon="pi pi-times"
+        v-model="v$.confirm.$model"
+        :style="v$.confirm.$invalid && submitted ? 'border-color: #fca5a5' : ''"
+      />
+    </div>
     <!--TODO: submit button -->
     <div class="eleven">
       <Button
         icon="pi pi-check"
         label="Submit"
-        class="p-button-raised"
+        class="p-button-raised w-8rem"
         @click="submitForm"
       />
     </div>
   </form>
+  <!--TODO: Toast Messages -->
+  <Toast />
 </template>
 
 <script>
@@ -172,6 +174,7 @@ export default {
       rating: null,
       confirm: false,
       degree: null,
+      degree2: null,
       degreeOptions: ["Student", "Collegian", "Professor"],
       submitted: false,
     };
@@ -196,17 +199,38 @@ export default {
     email(value) {
       this.email = value.replace(/\s+/g, "");
     },
+    confirm(value) {
+      if (value) {
+        this.showToast(
+          "info",
+          "You confirmed our terms and conditions",
+          "#terms link",
+          5000
+        );
+      }
+    },
   },
+
   methods: {
     submitForm() {
       this.submitted = true;
       if (!this.v$.$invalid) {
         this.postForm();
+        this.showToast(
+          "success",
+          "Registered",
+          "You'r info sended to firebase"
+        );
         this.resetForm();
       } else {
-        alert("Please enter a valid...");
+        this.showToast(
+          "error",
+          "Invalid or missing data",
+          "Please check you'r inputs"
+        );
       }
     },
+
     postForm() {
       fetch(
         "https://vue-http-demo-5d421-default-rtdb.firebaseio.com/users.json",
@@ -222,11 +246,13 @@ export default {
             password: this.password,
             rating: this.rating,
             degree: this.degree,
+            degreeMobile: this.degree2,
             age: this.validAge,
           }),
         }
       );
     },
+
     resetForm() {
       this.firstName = "";
       this.lastName = "";
@@ -238,10 +264,21 @@ export default {
       this.rating = null;
       this.confirm = false;
       this.degree = null;
+      this.degree2 = null;
       this.submitted = false;
     },
+
     setAge() {
       this.validAge = this.age;
+    },
+
+    showToast(type, title, content, time = 3000) {
+      this.$toast.add({
+        severity: type,
+        summary: title,
+        detail: content,
+        life: time,
+      });
     },
   },
 };
@@ -303,6 +340,10 @@ export default {
   grid-area: eleven;
 }
 
+.hidden-in-small-screen {
+  visibility: hidden;
+}
+
 @media (min-width: 42em) {
   #form {
     grid-template-areas:
@@ -315,10 +356,21 @@ export default {
       "ten ten"
       "eight eleven";
   }
+
+  .hidden-in-large-screen {
+    visibility: hidden;
+  }
+  .hidden-in-small-screen {
+    visibility: visible;
+  }
 }
 
 #radio {
   display: grid;
   gap: 1rem;
+}
+
+#radio label {
+  margin-left: 1rem;
 }
 </style>
