@@ -10,7 +10,7 @@
         id="firstName"
         type="text"
         v-model.trim="v$.firstName.$model"
-        required
+        :class="{ 'p-invalid': v$.firstName.$invalid && submitted }"
       />
       <label for="firstName">First name</label>
     </div>
@@ -20,7 +20,7 @@
         id="lastName"
         type="text"
         v-model.trim="v$.lastName.$model"
-        required
+        :class="{ 'p-invalid': v$.lastName.$invalid && submitted }"
       />
       <label for="lastName">Last name</label>
     </div>
@@ -30,14 +30,14 @@
         id="email"
         type="email"
         v-model.trim="v$.email.$model"
-        required
+        :class="{ 'p-invalid': v$.email.$invalid && submitted }"
       />
       <label for="email">Email</label>
     </div>
     <!--TODO: Age -->
     <div class="five p-field p-md-4">
-      <h5 :style="{ visibility: age >= 5 ? 'visible' : 'hidden' }">Age</h5>
-      <Knob v-model="age" :size="150" :min="5" :max="150" />
+      <h5 :style="{ visibility: validAge ? 'visible' : 'hidden' }">Age</h5>
+      <Knob v-model="age" @change="setAge()" :size="150" :min="5" :max="150" />
     </div>
     <!--TODO: PassWord -->
     <div class="six p-float-label">
@@ -46,6 +46,7 @@
         v-model="v$.password.$model"
         toggleMask
         size="17"
+        :class="{ 'p-invalid': v$.password.$invalid && submitted }"
       ></Password>
       <label for="password">Password</label>
     </div>
@@ -57,6 +58,7 @@
         toggleMask
         :feedback="false"
         size="17"
+        :class="{ 'p-invalid': v$.confirmPassword.$invalid && submitted }"
       ></Password>
       <label for="confirmPassword">Confirm Password</label>
     </div>
@@ -105,6 +107,7 @@
         offLabel="Confirm"
         onIcon="pi pi-check"
         offIcon="pi pi-times"
+        :style="v$.confirm.$invalid && submitted ? 'border-color: #fca5a5' : ''"
       />
     </div>
     <!--TODO: Rating -->
@@ -159,17 +162,18 @@ export default {
   },
   data() {
     return {
-      firstName: null,
-      lastName: null,
-      email: null,
+      firstName: "",
+      lastName: "",
+      email: "",
       age: "Age",
       validAge: null,
-      password: null,
-      confirmPassword: null,
+      password: "",
+      confirmPassword: "",
       rating: null,
       confirm: false,
       degree: null,
       degreeOptions: ["Student", "Collegian", "Professor"],
+      submitted: false,
     };
   },
   validations() {
@@ -183,11 +187,6 @@ export default {
     };
   },
   watch: {
-    age(value) {
-      if (!value === "Age") {
-        this.validAge = value;
-      }
-    },
     firstName(value) {
       this.firstName = value.replace(/\s+/g, " ");
     },
@@ -200,10 +199,13 @@ export default {
   },
   methods: {
     submitForm() {
+      this.submitted = true;
       if (!this.v$.$invalid) {
         this.postForm();
+        this.resetForm();
+      } else {
+        alert("Please enter a valid...");
       }
-      this.resetForm();
     },
     postForm() {
       fetch(
@@ -226,16 +228,20 @@ export default {
       );
     },
     resetForm() {
-      this.firstName = null;
-      this.lastName = null;
-      this.email = null;
+      this.firstName = "";
+      this.lastName = "";
+      this.email = "";
       this.age = "Age";
       this.validAge = null;
-      this.password = null;
-      this.confirmPassword = null;
+      this.password = "";
+      this.confirmPassword = "";
       this.rating = null;
       this.confirm = false;
       this.degree = null;
+      this.submitted = false;
+    },
+    setAge() {
+      this.validAge = this.age;
     },
   },
 };
