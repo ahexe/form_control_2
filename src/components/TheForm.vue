@@ -163,6 +163,7 @@ export default {
       lastName: null,
       email: null,
       age: "Age",
+      validAge: null,
       password: null,
       confirmPassword: null,
       rating: null,
@@ -181,34 +182,60 @@ export default {
       confirm: { required, sameAsTrue: sameAs(true) },
     };
   },
-
+  watch: {
+    age(value) {
+      if (!value === "Age") {
+        this.validAge = value;
+      }
+    },
+    firstName(value) {
+      this.firstName = value.replace(/\s+/g, " ");
+    },
+    lastName(value) {
+      this.lastName = value.replace(/\s+/g, " ");
+    },
+    email(value) {
+      this.email = value.replace(/\s+/g, "");
+    },
+  },
   methods: {
     submitForm() {
-      const validAge = this.age === "Age" ? null : this.age;
-      this.firstName = this.firstName.replace(/\s+/g, " ");
-      this.lastName = this.lastName.replace(/\s+/g, " ");
-      this.email = this.email.replace(/\s+/g, "");
-
       if (!this.v$.$invalid) {
-        fetch(
-          "https://vue-http-demo-5d421-default-rtdb.firebaseio.com/users.json",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              firstName: this.firstName,
-              lastName: this.lastName,
-              email: this.email,
-              password: this.password,
-              rating: this.rating,
-              degree: this.degree,
-              age: validAge,
-            }),
-          }
-        );
+        this.postForm();
       }
+      this.resetForm();
+    },
+    postForm() {
+      fetch(
+        "https://vue-http-demo-5d421-default-rtdb.firebaseio.com/users.json",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstName: this.firstName,
+            lastName: this.lastName,
+            email: this.email,
+            password: this.password,
+            rating: this.rating,
+            degree: this.degree,
+            age: this.validAge,
+          }),
+        }
+      );
+    },
+    resetForm() {
+      this.firstName = null;
+      this.lastName = null;
+      this.email = null;
+      this.age = "Age";
+      this.validAge = null;
+      this.password = null;
+      this.confirmPassword = null;
+      this.rating = null;
+      this.confirm = false;
+      this.degree = null;
     },
   },
 };
