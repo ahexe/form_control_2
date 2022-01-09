@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import PrimeVue from 'primevue/config';
 import Button from 'primevue/button';
+import ToastService from 'primevue/toastservice';
 
 
 import 'primevue/resources/themes/lara-dark-teal/theme.css'       //theme
@@ -19,6 +20,7 @@ app.use(PrimeVue, { ripple: true }, { inputStyle: 'filled' }, {
         tooltip: 1100       //tooltip
     }
 });
+app.use(ToastService);
 
 app.component('Button', Button)
 

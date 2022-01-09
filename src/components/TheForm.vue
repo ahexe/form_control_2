@@ -1,22 +1,37 @@
 <template>
-  <form id="form" class="p-input-filled" action="">
+  <form id="form" class="p-input-filled" @keydown.enter="submitForm">
     <!--TODO: Title -->
     <div class="one">
       <h1>Sign Up</h1>
     </div>
     <!--TODO: First Name -->
     <div class="two p-float-label">
-      <InputText id="firstName" type="text" v-model="firstName" />
+      <InputText
+        id="firstName"
+        type="text"
+        v-model.trim="v$.firstName.$model"
+        required
+      />
       <label for="firstName">First name</label>
     </div>
     <!--TODO: Last Name -->
     <div class="three p-float-label">
-      <InputText id="lastName" type="text" v-model="lastName" />
+      <InputText
+        id="lastName"
+        type="text"
+        v-model.trim="v$.lastName.$model"
+        required
+      />
       <label for="lastName">Last name</label>
     </div>
     <!--TODO: Email -->
     <div class="four p-float-label">
-      <InputText id="email" type="email" v-model="email" />
+      <InputText
+        id="email"
+        type="email"
+        v-model.trim="v$.email.$model"
+        required
+      />
       <label for="email">Email</label>
     </div>
     <!--TODO: Age -->
@@ -24,35 +39,31 @@
       <h5 :style="{ visibility: age >= 5 ? 'visible' : 'hidden' }">Age</h5>
       <Knob v-model="age" :size="150" :min="5" :max="150" />
     </div>
-    <!--TODO: PassWord 1 -->
+    <!--TODO: PassWord -->
     <div class="six p-float-label">
       <Password
         id="password"
-        v-model="password"
+        v-model="v$.password.$model"
         toggleMask
         size="17"
       ></Password>
       <label for="password">Password</label>
     </div>
-    <!--TODO: PassWord 2 -->
+    <!--TODO: Confirm Password -->
     <div class="seven p-float-label">
       <Password
-        id="password2"
-        v-model="password2"
+        id="confirmPassword"
+        v-model="v$.confirmPassword.$model"
         toggleMask
         :feedback="false"
         size="17"
       ></Password>
-      <label for="password2">Confirm Password</label>
+      <label for="confirmPassword">Confirm Password</label>
     </div>
     <!--TODO: Degree Large screen -->
     <div class="nine" v-if="true">
       <h4>Your education</h4>
-      <SelectButton
-        v-model="degree"
-        :options="degreeOptions"
-        optionLabel="degreeTitle"
-      />
+      <SelectButton v-model="degree" :options="degreeOptions" />
     </div>
     <!--TODO: Degree Small screen -->
     <div class="nine" id="radio" v-if="false">
@@ -61,8 +72,8 @@
         <RadioButton
           id="Student"
           name="Student"
-          :value="degreeOptions[0].value"
-          v-model="degree2"
+          :value="degreeOptions[0]"
+          v-model="degree"
         />
         <label for="Student">Student</label>
       </div>
@@ -70,8 +81,8 @@
         <RadioButton
           id="Collegian"
           name="Collegian"
-          :value="degreeOptions[1].value"
-          v-model="degree2"
+          :value="degreeOptions[1]"
+          v-model="degree"
         />
         <label for="Collegian">Collegian</label>
       </div>
@@ -79,8 +90,8 @@
         <RadioButton
           id="Professor"
           name="Professor"
-          :value="degreeOptions[2].value"
-          v-model="degree2"
+          :value="degreeOptions[2]"
+          v-model="degree"
         />
         <label for="Professor">Professor</label>
       </div>
@@ -89,7 +100,7 @@
     <div class="eight">
       <ToggleButton
         id="confirm"
-        v-model="confirm"
+        v-model="v$.confirm.$model"
         onLabel="I confirm"
         offLabel="Confirm"
         onIcon="pi pi-check"
@@ -108,21 +119,35 @@
     </div>
     <!--TODO: submit button -->
     <div class="eleven">
-      <Button icon="pi pi-check" label="Submit" class="p-button-raised" />
+      <Button
+        icon="pi pi-check"
+        label="Submit"
+        class="p-button-raised"
+        @click="submitForm"
+      />
     </div>
   </form>
 </template>
 
 <script>
-import InputText from "../../node_modules/primevue/inputtext";
-import Knob from "../../node_modules/primevue/knob";
-import Password from "../../node_modules/primevue/password";
-import Rating from "../../node_modules/primevue/rating";
-import ToggleButton from "../../node_modules/primevue/togglebutton";
-import SelectButton from "../../node_modules/primevue/selectbutton";
-import RadioButton from "../../node_modules/primevue/radiobutton";
+import InputText from "primevue/inputtext";
+import Knob from "primevue/knob";
+import Password from "primevue/password";
+import Rating from "primevue/rating";
+import ToggleButton from "primevue/togglebutton";
+import SelectButton from "primevue/selectbutton";
+import RadioButton from "primevue/radiobutton";
+import useVuelidate from "@vuelidate/core";
+import { required, email, helpers, sameAs } from "@vuelidate/validators";
+
+const mediumPassword = helpers.regex(
+  /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})./
+);
 
 export default {
+  setup() {
+    return { v$: useVuelidate() };
+  },
   components: {
     InputText,
     Knob,
@@ -139,19 +164,53 @@ export default {
       email: null,
       age: "Age",
       password: null,
-      password2: null,
-      rating: 3,
+      confirmPassword: null,
+      rating: null,
       confirm: false,
       degree: null,
-      degree2: null,
-      degreeOptions: [
-        { degreeTitle: "Student", value: "Student" },
-        { degreeTitle: "Collegian", value: "Collegian" },
-        { degreeTitle: "Professor", value: "Professor" },
-      ],
+      degreeOptions: ["Student", "Collegian", "Professor"],
     };
   },
-  methods: {},
+  validations() {
+    return {
+      firstName: { required },
+      lastName: { required },
+      email: { required, email },
+      password: { required, mediumPassword },
+      confirmPassword: { required, sameAsPassword: sameAs(this.password) },
+      confirm: { required, sameAsTrue: sameAs(true) },
+    };
+  },
+
+  methods: {
+    submitForm() {
+      const validAge = this.age === "Age" ? null : this.age;
+      this.firstName = this.firstName.replace(/\s+/g, " ");
+      this.lastName = this.lastName.replace(/\s+/g, " ");
+      this.email = this.email.replace(/\s+/g, "");
+
+      if (!this.v$.$invalid) {
+        fetch(
+          "https://vue-http-demo-5d421-default-rtdb.firebaseio.com/users.json",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              firstName: this.firstName,
+              lastName: this.lastName,
+              email: this.email,
+              password: this.password,
+              rating: this.rating,
+              degree: this.degree,
+              age: validAge,
+            }),
+          }
+        );
+      }
+    },
+  },
 };
 </script>
 
