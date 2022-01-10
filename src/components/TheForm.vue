@@ -123,7 +123,7 @@
     <!--TODO: submit button -->
     <div class="eleven">
       <Button
-        icon="pi pi-check"
+        :icon="loading ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
         label="Submit"
         class="p-button-raised w-8rem"
         @click="submitForm"
@@ -131,10 +131,27 @@
     </div>
   </form>
   <!--TODO: Toast Messages -->
-  <Toast />
+  <Toast :breakpoints="{ '480px': { width: '100%', right: '0', left: '0' } }" />
+  <Toast
+    position="top-left"
+    group="tl"
+    :breakpoints="{ '480px': { width: '100%', right: '0', left: '0' } }"
+  />
+  <Toast
+    position="bottom-left"
+    group="bl"
+    :breakpoints="{ '480px': { width: '100%', right: '0', left: '0' } }"
+  />
+  <Toast
+    position="bottom-right"
+    group="br"
+    :breakpoints="{ '480px': { width: '100%', right: '0', left: '0' } }"
+  />
 </template>
 
+// ! TODO: Scripts
 <script>
+// ! TODO: Imports
 import InputText from "primevue/inputtext";
 import Knob from "primevue/knob";
 import Password from "primevue/password";
@@ -145,14 +162,19 @@ import RadioButton from "primevue/radiobutton";
 import useVuelidate from "@vuelidate/core";
 import { required, email, helpers, sameAs } from "@vuelidate/validators";
 
+// ! TODO: Global JS
 const mediumPassword = helpers.regex(
   /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})./
 );
 
+const axios = require("axios").default;
+
+// ! TODO: Vue JS
 export default {
   setup() {
     return { v$: useVuelidate() };
   },
+  //  ! TODO: Components
   components: {
     InputText,
     Knob,
@@ -162,6 +184,7 @@ export default {
     SelectButton,
     RadioButton,
   },
+  //  ! TODO: Data
   data() {
     return {
       firstName: "",
@@ -177,8 +200,10 @@ export default {
       degree2: null,
       degreeOptions: ["Student", "Collegian", "Professor"],
       submitted: false,
+      loading: false,
     };
   },
+  //  ! TODO: Validations
   validations() {
     return {
       firstName: { required },
@@ -189,6 +214,7 @@ export default {
       confirm: { required, sameAsTrue: sameAs(true) },
     };
   },
+  //  ! TODO: Watchers
   watch: {
     firstName(value) {
       this.firstName = value.replace(/\s+/g, " ");
@@ -205,23 +231,20 @@ export default {
           "info",
           "You confirmed our terms and conditions",
           "#terms link",
-          5000
+          4000,
+          "bl"
         );
       }
     },
   },
-
+  //  ! TODO: Methods
   methods: {
+    //  ! TODO:
     submitForm() {
       this.submitted = true;
       if (!this.v$.$invalid) {
+        this.loading = true;
         this.postForm();
-        this.showToast(
-          "success",
-          "Registered",
-          "You'r info sended to firebase"
-        );
-        this.resetForm();
       } else {
         this.showToast(
           "error",
@@ -230,16 +253,12 @@ export default {
         );
       }
     },
-
+    //  ! TODO:
     postForm() {
-      fetch(
-        "https://vue-http-demo-5d421-default-rtdb.firebaseio.com/users.json",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+      axios
+        .post(
+          "https://vue-http-demo-5d421-default-rtdb.firebaseio.com/users.json",
+          {
             firstName: this.firstName,
             lastName: this.lastName,
             email: this.email,
@@ -248,11 +267,40 @@ export default {
             degree: this.degree,
             degreeMobile: this.degree2,
             age: this.validAge,
-          }),
-        }
-      );
+          },
+          { timeout: 3000 }
+        )
+        .then((response) => {
+          console.log(response);
+          if (response.statusText === "OK") {
+            this.showToast(
+              "success",
+              "Registered",
+              "You'r info sended to firebase"
+            );
+            this.resetForm();
+          } else {
+            console.log(response.statusText);
+            console.log(response.status);
+          }
+        })
+        .catch((error) => {
+          this.loading = false;
+          console.log(error);
+          if (
+            error.message.includes("timeout") ||
+            error.message.includes("Network")
+          ) {
+            this.showToast(
+              "error",
+              "Connection failed!",
+              "Please check your network connection",
+              5000
+            );
+          }
+        });
     },
-
+    //  ! TODO:
     resetForm() {
       this.firstName = "";
       this.lastName = "";
@@ -266,24 +314,27 @@ export default {
       this.degree = null;
       this.degree2 = null;
       this.submitted = false;
+      this.loading = false;
     },
-
+    //  ! TODO:
     setAge() {
       this.validAge = this.age;
     },
-
-    showToast(type, title, content, time = 3000) {
+    //  ! TODO:
+    showToast(type, title, content, time = 3000, pos = null) {
       this.$toast.add({
         severity: type,
         summary: title,
         detail: content,
         life: time,
+        group: pos,
       });
     },
   },
 };
 </script>
 
+// ! TODO: Style
 <style scoped>
 #form {
   display: grid;
