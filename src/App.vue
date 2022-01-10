@@ -33,8 +33,21 @@ export default {
     TheForm,
     UsersList,
   },
-  data() {
-    return {};
+  provide() {
+    return {
+      showToast: this.showToast,
+    };
+  },
+  methods: {
+    showToast(type, title, content, time = 3000, pos = null) {
+      this.$toast.add({
+        severity: type,
+        summary: title,
+        detail: content,
+        life: time,
+        group: pos,
+      });
+    },
   },
 };
 </script>

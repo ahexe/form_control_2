@@ -184,6 +184,8 @@ export default {
     SelectButton,
     RadioButton,
   },
+  // ! TODO: Inject
+  inject: ["showToast"],
   //  ! TODO: Data
   data() {
     return {
@@ -268,7 +270,7 @@ export default {
             degreeMobile: this.degree2,
             age: this.validAge,
           },
-          { timeout: 3000 }
+          { timeout: 5000 }
         )
         .then((response) => {
           console.log(response);
@@ -280,8 +282,7 @@ export default {
             );
             this.resetForm();
           } else {
-            console.log(response.statusText);
-            console.log(response.status);
+            throw new Error("Something is wrong!");
           }
         })
         .catch((error) => {
@@ -319,16 +320,6 @@ export default {
     //  ! TODO:
     setAge() {
       this.validAge = this.age;
-    },
-    //  ! TODO:
-    showToast(type, title, content, time = 3000, pos = null) {
-      this.$toast.add({
-        severity: type,
-        summary: title,
-        detail: content,
-        life: time,
-        group: pos,
-      });
     },
   },
 };
