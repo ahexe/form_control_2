@@ -41,21 +41,28 @@ export default {
     return {
       users: [],
       loading: false,
+      firstPageLoad: true,
     };
   },
   // ! TODO: Methods
   methods: {
     getData() {
+      this.loading = true;
       axios
         .get(
           "https://vue-http-demo-5d421-default-rtdb.firebaseio.com/users.json",
-          { timeout: 5000 }
+          {
+            timeout: 5000,
+          }
         )
         .then((response) => {
           return response.data;
         })
         .catch((error) => {
-          console.log(error);
+          if (!this.firstPageLoad) {
+            this.showToast("error", "Error", error.message);
+          }
+          this.loading = true;
         })
         .then((data) => {
           console.log(data);
@@ -71,12 +78,44 @@ export default {
                 degree: data[id].degree,
               });
             }
-            this.users = result;
-          } else {
-            this.showToast("warn", "Missing Data", "There is no data to show");
+            if (JSON.stringify(this.users) === JSON.stringify(result)) {
+              if (!this.firstPageLoad) {
+                this.showToast(
+                  "info",
+                  "Your list is up to date",
+                  "There is no new data to show"
+                );
+              }
+            } else {
+              if (!this.firstPageLoad) {
+                this.showToast(
+                  "success",
+                  "Updated",
+                  "The list has been updated"
+                );
+              }
+              this.users = result;
+            }
+          } else if (data === null) {
+            if (!this.firstPageLoad) {
+              this.showToast(
+                "warn",
+                "Missing Data",
+                "There is no data to show"
+              );
+            }
+            this.users = [];
           }
+          this.loading = false;
         });
     },
+  },
+  // ! TODO: Hooks
+  mounted() {
+    this.getData();
+    setTimeout(() => {
+      this.firstPageLoad = false;
+    }, 1000);
   },
 };
 </script>
