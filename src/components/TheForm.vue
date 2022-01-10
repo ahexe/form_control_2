@@ -273,7 +273,6 @@ export default {
           { timeout: 5000 }
         )
         .then((response) => {
-          console.log(response);
           if (response.statusText === "OK") {
             this.showToast(
               "success",
@@ -287,7 +286,6 @@ export default {
         })
         .catch((error) => {
           this.loading = false;
-          console.log(error);
           if (
             error.message.includes("timeout") ||
             error.message.includes("Network")

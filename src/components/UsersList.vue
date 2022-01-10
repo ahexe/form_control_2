@@ -65,7 +65,6 @@ export default {
           this.loading = true;
         })
         .then((data) => {
-          console.log(data);
           if (data) {
             const result = [];
             for (const id in data) {
